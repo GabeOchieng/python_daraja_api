@@ -1,4 +1,5 @@
 import abc
+from daraja_api.exceptions import DarajaException
 
 class AbstractConfig(abc.ABC):
 
@@ -38,19 +39,26 @@ class ConfigFromObject(AbstractConfig):
         for i in required_attrs:
             self.get_attr_from_obj(i)
         allowed_env = ['sandbox','production']
-        setattr(obj,'MPESA_ENVIRONMENT',getattr(obj,'MPESA_ENVIRONMEN').lower())
-        if getattr(obj,'MPESA_ENVIRONMENT') not in allowed_env:
-            raise Exception('Allowed environments values:'+','.join(allowed_env))
+        env = self.obj.get('MPESA_ENVIRONMENT') if type(self.obj)==dict\
+                else getattr(obj,'MPESA_ENVIRONMENT')
+        if env not in allowed_env:
+            raise DarajaException('Allowed environments values: '+','.join(allowed_env))
         
     def get_attr_from_obj(self, attr):
         try:
-            _v=getattr(self.obj,attr)
-            if type(_v) != str or _v='':
-                raise Exception('{attr} must be a string, cannot be empty'.format(attr=attr))
+            if type(self.obj)==object:
+                _v=getattr(self.obj,attr)
+            elif type(self.obj)==dict:
+                _v=self.obj.get(attr)
+            else:
+                raise DarajaException('Invalid Config Object Type')
+            if _v==None:
+                raise AttributeError()
+            if type(_v) != str or _v=='':
+                raise DarajaException('{attr} must be a string, cannot be empty'.format(attr=attr))
             return _v
         except AttributeError:
-            if raise_exception:
-                raise Exception('{attr} is required'.format(attr=attr))
+            raise DarajaException('{attr} is required'.format(attr=attr))
 
     def get_consumer_key(self)->str:
         return self.get_attr_from_obj('MPESA_CONSUMER_KEY')
@@ -64,15 +72,12 @@ class ConfigFromObject(AbstractConfig):
     def get_shortcode(self)->str:
         return self.get_attr_from_obj('MPESA_SHORTCODE')
 
-    @abc.abstractmethod
     def get_express_shortcode(self)->str:
         return self.get_attr_from_obj('MPESA_EXPRESS_SHORTCODE')
 
-    @abc.abstractmethod
     def get_shortcode_type(self)->str:
         return self.get_attr_from_obj('MPESA_SHORTCODE_TYPE')
 
-    @abc.abstractmethod
     def get_passkey(self)->str:
         return self.get_attr_from_obj('MPESA_PASSKEY')
 

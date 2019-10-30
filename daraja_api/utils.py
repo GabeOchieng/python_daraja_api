@@ -1,3 +1,4 @@
+import phonenumbers
 from daraja_api.conf import AbstractConfig
 from daraja_api.exceptions import DarajaException
 
@@ -10,8 +11,9 @@ def format_phone_number(phone_number:str, format='E164'):
         except Exception as e:
             raise DarajaException(str(e))
         if format=="E164":
-            return phonenumbers.format_number(phone_number, 
+            p = phonenumbers.format_number(phone_number, 
                 phonenumbers.PhoneNumberFormat.E164)
+            return p[1:]
         elif format=="national":
             return phonenumbers.format_number(phone_number,
             phonenumbers.PhoneNumberFormat.national)
