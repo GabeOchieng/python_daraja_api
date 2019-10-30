@@ -50,7 +50,6 @@ class LNMApiClient(AbstractLNMApiClient):
         party_a = phone_number
         party_b = business_short_code
         url = base_url(self.config) + '/mpesa/stkpush/v1/processrequest'
-        print(phone_number)
         data = {
             'BusinessShortCode': business_short_code,
             'Password': password,
@@ -79,7 +78,6 @@ class LNMApiClient(AbstractLNMApiClient):
                 pass
             raise DarajaException('STK push failed, status_code: %s'%str(r.status_code))
         data = r.json()
-        print(data)
         return data
 
     def parse_stk_callback_response(self, body):
