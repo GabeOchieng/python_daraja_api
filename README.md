@@ -4,10 +4,10 @@
 - WIP (pre-alpha).
 
 ## why re-inventing the wheel?
-- yeah they exists "many" daraja api python libraries, but none of them suited my project needs are trying to tweek them just ended up with almost not meeting my deadline.
+- They exists "many" daraja api python libraries, but none of them suited my project needs, and are trying to tweek them just ended up with almost not meeting my deadlines.
 
 ## Contributions
-- Highly welcomed, documenting(please someone!), bug fixes and new features, got some time on you, write the b2b api client!!!.
+- Highly welcomed, documenting(please someone!), bug fixes and new features, got some time on you, write the b2b api client.
 
 ## Work Done
 - [x] Generate Auth Token.
@@ -43,6 +43,7 @@ settings={
 config = ConfigFromObject(settings)
 lnm = LNMApiClient(config)
 
+# sends an stk push to the clients phone
 # phone,amount, callback_url
 res = lnm.stk_push('0712345678',1,'https://en0o5cquqd6r2.x.pipedream.net/')
 '''
