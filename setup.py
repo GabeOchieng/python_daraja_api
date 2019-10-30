@@ -1,8 +1,9 @@
-from distutils.core import setup
+from setuptools import setup, find_packages
+
 setup(
   name = 'daraja-api',         
-  packages = ['daraja_api'],   
-  version = '0.1',     
+  packages = find_packages(exclude=['*.tests', '*.tests.*', 'tests.*', 'tests']),   
+  version = '0.11',     
   license='MIT',      
   description = 'yet another python daraja api library',
   author = 'jack ogina',                  
